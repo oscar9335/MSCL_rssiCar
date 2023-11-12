@@ -1,0 +1,75 @@
+import flask
+# import werkzeug
+from flask import request, send_file, redirect, url_for
+import os
+from os import walk
+from datetime import datetime
+
+# from flask_autoindex import AutoIndex
+
+
+import detect as detect
+
+app = flask.Flask(__name__)
+# AutoIndex(app, browse_root=os.path.curdir)
+
+
+file_save_path = "/home/mcs/Yang/store_files/demo"
+
+
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    return "Hello"
+
+
+
+@app.route("/image_store",methods=['GET', 'POST'])
+def image_store():
+    print("some on calling")
+
+    if request.files:
+        print("calling the server")
+        image = request.files["image"]
+
+        # videoname = video.filename
+
+        #store the file in the specific dir
+        image.save(os.path.join(file_save_path,image.filename))
+        
+        print("image saved")
+        return "OK, Video upload finished"
+    else:
+        print("Something went wrong while upload video!!!")
+        return "Something went wrong while upload video!!!"
+
+
+@app.route("/receive_RSSI",methods=['GET', 'POST'])
+def receive_RSSI():
+    print("RSSI fun")
+    beacon1_RSSI = request.form["beacon1"]
+    beacon2_RSSI = request.form["beacon2"]
+    beacon3_RSSI = request.form["beacon3"]
+    beacon4_RSSI = request.form["beacon4"]
+    beacon5_RSSI = request.form["beacon5"]
+    beacon6_RSSI = request.form["beacon6"]
+
+    RSSIS = []
+    RSSIS.append(beacon1_RSSI)
+    RSSIS.append(beacon2_RSSI)
+    RSSIS.append(beacon3_RSSI)
+    RSSIS.append(beacon4_RSSI)
+    RSSIS.append(beacon5_RSSI)
+    RSSIS.append(beacon6_RSSI)
+
+    print(RSSIS)
+
+    return "received RSSI"
+
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
+
+
+
+
