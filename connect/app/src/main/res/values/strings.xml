@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">connect</string>
+    <string name="setting">設定導盲磚</string>
+    <string name="save">Save</string>
+    <string name="reset">Reset</string>
+    <string name="navigation">navigation</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="title_activity_car_camera">car_Camera</string>
+
+</resources>
