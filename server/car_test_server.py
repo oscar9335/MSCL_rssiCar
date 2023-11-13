@@ -8,8 +8,6 @@ from datetime import datetime
 # from flask_autoindex import AutoIndex
 
 
-import detect as detect
-
 app = flask.Flask(__name__)
 # AutoIndex(app, browse_root=os.path.curdir)
 
