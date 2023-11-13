@@ -120,6 +120,7 @@ public class car_camera extends AppCompatActivity implements View.OnClickListene
                 String[] RSSI_save={"100","100","100","100","100","100"};   // only 6 beacons used in a exam
 
                 if (!beacons.isEmpty()){   // when there are beacons in the region  and in the list
+                    int index_of_RSSI_save = 0;
                     for(final Beacon beacon : beacons){
                         Log.d("test", " onBeaconsDiscovered: " + beacon.getMacAddress() + " " + beacon.getProximityUUID() + " " + beacon.getRssi());
                         String  UUID = String.valueOf(beacon.getProximityUUID());
@@ -131,9 +132,10 @@ public class car_camera extends AppCompatActivity implements View.OnClickListene
 
                         String index = UUID.substring(UUID.length()-1);  // our beacon has a tag like:07a965 and we take 5 as a index
                         // ********************************************************************
-                        int index_int = Integer.parseInt(index);   // this need to be confirm for now I just use 07a965
+//                        int index_int = Integer.parseInt(index);   // this need to be confirm for now I just use 07a965
                         // ********************************************************************
-                        RSSI_save[index_int] = '[' + index + ']' + RSSI;  //ex: RSSI_save[5] = "[5]-61"
+                        RSSI_save[index_of_RSSI_save] = '[' + index + ']' + RSSI;  //ex: RSSI_save[5] = "[5]-61"
+                        index_of_RSSI_save += 1;
 
                     }
                     postRequest_RSSI(car_url,RSSI_save);
