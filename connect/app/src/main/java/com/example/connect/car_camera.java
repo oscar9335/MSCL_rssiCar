@@ -70,6 +70,7 @@ public class car_camera extends AppCompatActivity implements View.OnClickListene
     private BeaconManager beaconManager;
     private BeaconRegion region;
 
+    private String date_now_gotfromrequest;
 
 
 
@@ -134,7 +135,8 @@ public class car_camera extends AppCompatActivity implements View.OnClickListene
                         // ********************************************************************
 //                        int index_int = Integer.parseInt(index);   // this need to be confirm for now I just use 07a965
                         // ********************************************************************
-                        RSSI_save[index_of_RSSI_save] = '[' + index + ']' + RSSI;  //ex: RSSI_save[5] = "[5]-61"
+                        date_postRequest(car_url);
+                        RSSI_save[index_of_RSSI_save] = '[' + UUID + ']' + RSSI + date_now_gotfromrequest;  //ex: RSSI_save[5] = "[5]-61"
                         index_of_RSSI_save += 1;
 
                     }
@@ -305,6 +307,37 @@ public class car_camera extends AppCompatActivity implements View.OnClickListene
         String extension = MimeTypeMap.getFileExtensionFromUrl(path);
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
     }
+
+    private void date_postRequest(String car_url){
+
+        OkHttpClient okHttpClient = new OkHttpClient();
+
+        String date_obtain_url = car_url + "timesynchronize";
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("date_request", "date_request_give me the time")
+                .build();
+
+        Request request = new Request.Builder()
+                .url(date_obtain_url)
+                .post(formBody)
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.d("test", "[Failed response resend request]:" + e);
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                date_now_gotfromrequest = response.body().string();
+                Log.d("test", "Success response" + date_now_gotfromrequest);
+            }
+        });
+    }
+
     //start timer function
     void startTimer() {
         cTimer = new CountDownTimer(3000, 200) {
