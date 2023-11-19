@@ -4,6 +4,7 @@ from flask import request, send_file, redirect, url_for
 import os
 from os import walk
 from datetime import datetime
+import csv
 
 # from flask_autoindex import AutoIndex
 
@@ -59,6 +60,14 @@ def receive_RSSI():
     RSSIS.append(beacon5_RSSI)
     RSSIS.append(beacon6_RSSI)
 
+    # data write into the csv file "store_data" with append
+    # so, you should remove the previous store_data before a new experiment start
+    file = open('store_data.csv',mode='a', newline='')
+    writer = csv.writer(file)   
+    writer.writerow(RSSIS)
+    file.close()
+
+
     print(RSSIS)
 
     return "received RSSI"
@@ -67,13 +76,13 @@ def receive_RSSI():
 def synchronize():
 
     date_request = request.form["date_request"]
-    print(date_request)
+    # print(date_request)
 
     if date_request:
     # yyyy_MM_dd_hh_mm_ss_SSS
     # ex: 2022_05_20_17_36_45_485
         date_send = datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%f")[:-3]
-        print(date_send)
+        # print(date_send)
         # print(type(date_send))
 
         return date_send
