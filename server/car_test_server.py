@@ -63,6 +63,22 @@ def receive_RSSI():
 
     return "received RSSI"
 
+@app.route("/timesynchronize",methods=['GET', 'POST'])
+def synchronize():
+
+    date_request = request.form["date_request"]
+    print(date_request)
+
+    if date_request:
+    # yyyy_MM_dd_hh_mm_ss_SSS
+    # ex: 2022_05_20_17_36_45_485
+        date_send = datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%f")[:-3]
+        print(date_send)
+        # print(type(date_send))
+
+        return date_send
+    return "ERROR"
+
 
 
 if __name__ == "__main__":
