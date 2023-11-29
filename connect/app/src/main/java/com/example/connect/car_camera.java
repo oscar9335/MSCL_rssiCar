@@ -1,6 +1,8 @@
 package com.example.connect;
 
 
+import static java.security.AccessController.getContext;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraSelector;
@@ -15,6 +17,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.provider.Settings;
 import android.util.Log;
 import android.util.Size;
 
@@ -50,6 +53,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import android.provider.Settings.Secure;
+
 
 
 public class car_camera extends AppCompatActivity implements View.OnClickListener {
@@ -71,6 +76,8 @@ public class car_camera extends AppCompatActivity implements View.OnClickListene
     private BeaconRegion region;
 
     private String date_now_gotfromrequest;
+
+    private String user_ID;
 
 
 
@@ -108,10 +115,15 @@ public class car_camera extends AppCompatActivity implements View.OnClickListene
         timer_status = 0;
 
         beaconManager = new BeaconManager(car_camera.this);
-        beaconManager.setForegroundScanPeriod(2000,0); // every 2 second scan 1 time and wait 0 sec to next scan
+        beaconManager.setForegroundScanPeriod(500,0); // every 2 second scan 1 time and wait 0 sec to next scan
         region = new BeaconRegion("ranged region",null,null,null);
 
         Log.d("test", " beaconManager set: ");
+
+        user_ID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);;
+
+        Log.d("test", " user ID : " + user_ID);
+
 
         beaconManager.setRangingListener(new BeaconManager.BeaconRangingListener() {
             @Override
@@ -122,6 +134,7 @@ public class car_camera extends AppCompatActivity implements View.OnClickListene
 
                 if (!beacons.isEmpty()){   // when there are beacons in the region  and in the list
                     int index_of_RSSI_save = 0;
+                    date_postRequest(car_url);
                     for(final Beacon beacon : beacons){
                         Log.d("test", " onBeaconsDiscovered: " + beacon.getMacAddress() + " " + beacon.getProximityUUID() + " " + beacon.getRssi());
                         String  UUID = String.valueOf(beacon.getProximityUUID());
@@ -135,12 +148,11 @@ public class car_camera extends AppCompatActivity implements View.OnClickListene
                         // ********************************************************************
 //                        int index_int = Integer.parseInt(index);   // this need to be confirm for now I just use 07a965
                         // ********************************************************************
-                        date_postRequest(car_url);
-                        RSSI_save[index_of_RSSI_save] = '[' + UUID + ']' + RSSI + date_now_gotfromrequest;  //ex: RSSI_save[5] = "[5]-61"
+                        RSSI_save[index_of_RSSI_save] = '[' + UUID + ']' + RSSI + ":" +date_now_gotfromrequest;  //ex: RSSI_save[5] = "[5]-61"
                         index_of_RSSI_save += 1;
 
                     }
-                    postRequest_RSSI(car_url,RSSI_save);
+                    postRequest_RSSI(car_url,RSSI_save,user_ID);
                 }
             }
         });
@@ -155,10 +167,6 @@ public class car_camera extends AppCompatActivity implements View.OnClickListene
         int id = view.getId();
         if (id == R.id.testing) {
             message_car_camera.setText("This is testing calling");
-
-
-
-
 
         }
         else if (id == R.id.collect_data) {
@@ -269,7 +277,7 @@ public class car_camera extends AppCompatActivity implements View.OnClickListene
 
 
     }
-    private void postRequest_RSSI(String car_url,String RSSI_save[]){
+    private void postRequest_RSSI(String car_url,String RSSI_save[], String user_ID){
         OkHttpClient okHttpClient = new OkHttpClient();
 
         String room_URL = car_url + "receive_RSSI";
@@ -281,6 +289,7 @@ public class car_camera extends AppCompatActivity implements View.OnClickListene
                 .add("beacon4", RSSI_save[3])
                 .add("beacon5", RSSI_save[4])
                 .add("beacon6", RSSI_save[5])
+                .add("user_ID", user_ID)
                 .build();
 
         Request request = new Request.Builder()
