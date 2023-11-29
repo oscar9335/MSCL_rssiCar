@@ -51,6 +51,7 @@ def receive_RSSI():
     beacon4_RSSI = request.form["beacon4"]
     beacon5_RSSI = request.form["beacon5"]
     beacon6_RSSI = request.form["beacon6"]
+    user_ID = request.form["user_ID"]
 
     RSSIS = []
     RSSIS.append(beacon1_RSSI)
@@ -59,6 +60,7 @@ def receive_RSSI():
     RSSIS.append(beacon4_RSSI)
     RSSIS.append(beacon5_RSSI)
     RSSIS.append(beacon6_RSSI)
+    RSSIS.append(user_ID)
 
     # data write into the csv file "store_data" with append
     # so, you should remove the previous store_data before a new experiment start
