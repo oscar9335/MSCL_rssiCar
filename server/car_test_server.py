@@ -60,11 +60,14 @@ def receive_RSSI():
     RSSIS.append(beacon4_RSSI)
     RSSIS.append(beacon5_RSSI)
     RSSIS.append(beacon6_RSSI)
-    RSSIS.append(user_ID)
+    # RSSIS.append(user_ID)
+
+    # create a specific csv file for corresponding user ID
+    store_csv = "store_data" + user_ID + ".csv"
 
     # data write into the csv file "store_data" with append
     # so, you should remove the previous store_data before a new experiment start
-    file = open('store_data.csv',mode='a', newline='')
+    file = open('store_csv',mode='a', newline='')
     writer = csv.writer(file)   
     writer.writerow(RSSIS)
     file.close()
