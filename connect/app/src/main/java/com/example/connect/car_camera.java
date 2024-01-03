@@ -115,7 +115,7 @@ public class car_camera extends AppCompatActivity implements View.OnClickListene
         timer_status = 0;
 
         beaconManager = new BeaconManager(car_camera.this);
-        beaconManager.setForegroundScanPeriod(500,0); // every 2 second scan 1 time and wait 0 sec to next scan
+        beaconManager.setForegroundScanPeriod(2000,0); // every 2 second scan 1 time and wait 0 sec to next scan
         region = new BeaconRegion("ranged region",null,null,null);
 
         Log.d("test", " beaconManager set: ");
@@ -129,12 +129,14 @@ public class car_camera extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onBeaconsDiscovered(BeaconRegion region, List<Beacon> beacons) {
                 Log.d("test", "onBeaconsDiscovered");
-                int[] check = {0,0,0,0,0,0};
-                String[] RSSI_save={"100","100","100","100","100","100"};   // only 6 beacons used in a exam
+                int[] check = {0,0,0,0,0,0,0};
+                String[] RSSI_save={"100","100","100","100","100","100","100"};   // only 6 beacons used in a exam
 
                 if (!beacons.isEmpty()){   // when there are beacons in the region  and in the list
                     int index_of_RSSI_save = 0;
+
                     date_postRequest(car_url);
+
                     for(final Beacon beacon : beacons){
                         Log.d("test", " onBeaconsDiscovered: " + beacon.getMacAddress() + " " + beacon.getProximityUUID() + " " + beacon.getRssi());
                         String  UUID = String.valueOf(beacon.getProximityUUID());
@@ -148,7 +150,8 @@ public class car_camera extends AppCompatActivity implements View.OnClickListene
                         // ********************************************************************
 //                        int index_int = Integer.parseInt(index);   // this need to be confirm for now I just use 07a965
                         // ********************************************************************
-                        RSSI_save[index_of_RSSI_save] = '[' + UUID + ']' + RSSI + ":" +date_now_gotfromrequest;  //ex: RSSI_save[5] = "[5]-61"
+//                        RSSI_save[index_of_RSSI_save] = '[' + UUID + ']' + RSSI + ":" + date_now_gotfromrequest;  //ex: RSSI_save[5] = "[5]-61"
+                        RSSI_save[index_of_RSSI_save] =  date_now_gotfromrequest + "," + UUID + "," + RSSI;
                         index_of_RSSI_save += 1;
 
                     }
@@ -289,6 +292,7 @@ public class car_camera extends AppCompatActivity implements View.OnClickListene
                 .add("beacon4", RSSI_save[3])
                 .add("beacon5", RSSI_save[4])
                 .add("beacon6", RSSI_save[5])
+                .add("beacon7", RSSI_save[6])
                 .add("user_ID", user_ID)
                 .build();
 
@@ -306,7 +310,8 @@ public class car_camera extends AppCompatActivity implements View.OnClickListene
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                message_car_camera.setText(response.toString());
+//                message_car_camera.setText(response.toString());
+                Log.d("test", "Success response" + response);
             }
         });
 

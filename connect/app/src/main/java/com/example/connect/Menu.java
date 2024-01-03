@@ -34,38 +34,38 @@ public class Menu extends AppCompatActivity{
             }
         });
 
-        Button btn_Setting;
-        Button btn_Navigation;
-        btn_Setting=findViewById(R.id.btn_Setting);
-        btn_Navigation=findViewById(R.id.btn_Navigation);
-        Intent intent_GoSetting=new Intent(Menu.this,setting.class);
-        Intent intent_GoNavigation=new Intent(Menu.this,MainActivity.class);
-        btn_Setting.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-
-                startActivity(intent_GoSetting);
-
-
-            }
-
-
-
-        });
-
-        btn_Navigation.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-
-                startActivity(intent_GoNavigation);
-
-
-            }
-
-
-
-        });
-
+//        Button btn_Setting;
+//        Button btn_Navigation;
+//        btn_Setting=findViewById(R.id.btn_Setting);
+//        btn_Navigation=findViewById(R.id.btn_Navigation);
+//        Intent intent_GoSetting=new Intent(Menu.this,setting.class);
+//        Intent intent_GoNavigation=new Intent(Menu.this,MainActivity.class);
+//        btn_Setting.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view){
+//
+//                startActivity(intent_GoSetting);
+//
+//
+//            }
+//
+//
+//
+//        });
+//
+//        btn_Navigation.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view){
+//
+//                startActivity(intent_GoNavigation);
+//
+//
+//            }
+//
+//
+//
+//        });
+//
 
 
 
